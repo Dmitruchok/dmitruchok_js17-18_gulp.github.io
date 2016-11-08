@@ -28,10 +28,16 @@ gulp.task('js', function(){ // Создаем таск js
   .pipe(browserSync.reload({stream: true})) // Обновляем js на странице при изменении
 });
 
+gulp.task('html', function(){
+  return gulp.src('app/*.html')
+  .pipe(gulp.dest('dist'))
+  .pipe(browserSync.reload({stream: true}))
+});
+
 gulp.task('browser-sync', function() { // Создаем таск browser-sync
   browserSync({ // Выполняем browser Sync
     server: { // Определяем параметры сервера
-      baseDir: 'app' // Директория для сервера - app
+      baseDir: 'dist' // Директория для сервера - app
     },
     notify: false // Отключаем уведомления
   });
@@ -57,7 +63,7 @@ gulp.task('css-libs', ['scss'], function() {
 
 gulp.task('watch', ['browser-sync', 'css-libs', 'scripts'], function() {
   gulp.watch('app/sass/**/*.scss', ['scss']); // Наблюдение за scss файлами в папке sass
-  gulp.watch('app/*.html', browserSync.reload); // Наблюдение за HTML файлами в корне проекта
+  gulp.watch('app/*.html', ['html'], browserSync.reload); // Наблюдение за HTML файлами в корне проекта
   gulp.watch('app/js/**/*.js', ['js'], browserSync.reload); // Наблюдение за JS файлами в папке js
 });
 
