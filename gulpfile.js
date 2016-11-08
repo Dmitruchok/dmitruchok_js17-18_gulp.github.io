@@ -54,10 +54,10 @@ gulp.task('scripts', function() {
 });
 
 gulp.task('css-libs', ['scss'], function() {
-  return gulp.src('app/dist/css/libs.css') // Выбираем файл для минификации
+  return gulp.src('app/sass/libs.sass') // Выбираем файл для минификации
   .pipe(cssnano()) // Сжимаем
   .pipe(rename({suffix: '.min'})) // Добавляем суффикс .min
-  .pipe(gulp.dest('app/dist/css')); // Выгружаем в папку app/css
+  .pipe(gulp.dest('app/css')); // Выгружаем в папку app/css
 });
 
 
