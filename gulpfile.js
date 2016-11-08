@@ -14,7 +14,8 @@ var gulp = require('gulp'),
 
 gulp.task('scss', function(){ // Создаем таск Scss
   return gulp.src('app/sass/**/*.scss') // Берем источник
-  .pipe(sass()) // Преобразуем Sass в CSS посредством gulp-sass
+  .pipe(sass()) // Преобразуем Sass в CSS посредством gulp-sass.
+  .pipe(concat('style.min.css'))
   .pipe(autoprefixer(['last 15 versions', '> 1%', 'ie 8', 'ie 7'], { cascade: true })) // Создаем префиксы
   .pipe(gulp.dest('dist/css')) // Выгружаем результата в папку dist/css
   .pipe(browserSync.reload({stream: true})) // Обновляем CSS на странице при изменении
@@ -26,6 +27,12 @@ gulp.task('js', function(){ // Создаем таск js
   .pipe(uglify()) // Сжимаем JS файл
   .pipe(gulp.dest('dist/js')) // Выгружаем результата в папку
   .pipe(browserSync.reload({stream: true})) // Обновляем js на странице при изменении
+});
+
+gulp.task('css', function () {
+  return gulp.src('app/css/**/*.css')
+  .pipe(gulp.dest('dist/css'))
+  .pipe(browserSync.reload({stream: true}))
 });
 
 gulp.task('html', function(){
@@ -53,16 +60,17 @@ gulp.task('scripts', function() {
   .pipe(gulp.dest('dist/js')); // Выгружаем в папку app/js
 });
 
-gulp.task('css-libs', ['scss'], function() {
+/*gulp.task('css-libs', ['scss'], function() {
   return gulp.src('app/sass/libs.sass') // Выбираем файл для минификации
   .pipe(cssnano()) // Сжимаем
   .pipe(rename({suffix: '.min'})) // Добавляем суффикс .min
   .pipe(gulp.dest('app/css')); // Выгружаем в папку app/css
-});
+});*/
 
 
-gulp.task('watch', ['browser-sync', 'css-libs', 'scripts'], function() {
+gulp.task('watch', ['browser-sync', 'css', 'scripts'], function() {
   gulp.watch('app/sass/**/*.scss', ['scss']); // Наблюдение за scss файлами в папке sass
+  gulp.watch('app/css/**/*.css', ['css']);
   gulp.watch('app/*.html', ['html'], browserSync.reload); // Наблюдение за HTML файлами в корне проекта
   gulp.watch('app/js/**/*.js', ['js'], browserSync.reload); // Наблюдение за JS файлами в папке js
 });
